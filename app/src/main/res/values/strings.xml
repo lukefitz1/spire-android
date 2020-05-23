@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SpireAndroid</string>
+
+    <string name="login_btn">Login</string>
+    <string name="email_label">Email</string>
+    <string name="password_label">Password</string>
+    <string name="logo_description">Spire Logo</string>
+</resources>
