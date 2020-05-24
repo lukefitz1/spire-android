@@ -5,4 +5,5 @@
     <string name="email_label">Email</string>
     <string name="password_label">Password</string>
     <string name="logo_description">Spire Logo</string>
+    <string name="new_customer">New Customer</string>
 </resources>
