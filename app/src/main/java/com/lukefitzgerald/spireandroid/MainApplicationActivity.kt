@@ -2,9 +2,13 @@ package com.lukefitzgerald.spireandroid
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.lukefitzgerald.spireandroid.views.fragments.CustomerListFragment
+import java.util.*
 
-class MainApplicationActivity : AppCompatActivity() {
+private const val TAG = "TAG"
+
+class MainApplicationActivity : AppCompatActivity(), CustomerListFragment.Callbacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,5 +23,9 @@ class MainApplicationActivity : AppCompatActivity() {
                 .add(R.id.fragment_container, fragment)
                 .commit()
         }
+    }
+
+    override fun onCustomerSelected(customerId: UUID) {
+        Log.d(TAG, "MainApplicationActivity.onCustomerSelected: $customerId")
     }
 }

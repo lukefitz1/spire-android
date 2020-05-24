@@ -1,5 +1,6 @@
 package com.lukefitzgerald.spireandroid.views.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -13,10 +14,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lukefitzgerald.spireandroid.R
 import com.lukefitzgerald.spireandroid.models.Customer
 import com.lukefitzgerald.spireandroid.views.models.CustomerListViewModel
+import java.util.*
 
 private const val TAG = "CustomerListFragment"
 
 class CustomerListFragment : Fragment() {
+
+    //Required interface for hosting activities
+    interface Callbacks {
+        fun onCustomerSelected(crimeId: UUID)
+    }
+
+    private var callbacks: Callbacks? = null
 
     private lateinit var customersRecyclerView: RecyclerView
 //    private var adapter: CustomerAdapter? = null
@@ -24,6 +33,11 @@ class CustomerListFragment : Fragment() {
 
     private val customerListViewModel: CustomerListViewModel by lazy {
         ViewModelProviders.of(this).get(CustomerListViewModel::class.java)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callbacks = context as Callbacks?
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,14 +76,28 @@ class CustomerListFragment : Fragment() {
         )
     }
 
-//    override fun onDetach() {
-//        super.onDetach()
-//        callbacks = null
-//    }
+    override fun onDetach() {
+        super.onDetach()
+        callbacks = null
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.fragment_customer_list, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.new_customer -> {
+                val customer = Customer()
+                customer.firstName = "Luke"
+                customer.lastName = "Fitzgerald"
+                customerListViewModel.addCustomer(customer)
+                callbacks?.onCustomerSelected(customer.id)
+                true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 
     private fun updateUI(customers: List<Customer>) {
@@ -100,8 +128,10 @@ class CustomerListFragment : Fragment() {
         }
 
         override fun onClick(v: View) {
-            Toast.makeText(context, "${customer.firstName} pressed!", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "${customer.firstName} pressed!", Toast.LENGTH_SHORT).show()
+            callbacks?.onCustomerSelected(customer.id)
         }
+
     }
 
     private inner class CustomerAdapter(var customers: List<Customer>) : RecyclerView.Adapter<CustomerHolder>() {

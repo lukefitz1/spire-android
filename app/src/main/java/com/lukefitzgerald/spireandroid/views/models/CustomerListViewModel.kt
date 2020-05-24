@@ -19,4 +19,8 @@ class CustomerListViewModel : ViewModel() {
 
     private val customerRepository = CustomerRepository.get()
     val customerListLiveData = customerRepository.getCustomers()
+
+    fun addCustomer(customer: Customer) {
+        customerRepository.addCustomer(customer)
+    }
 }
