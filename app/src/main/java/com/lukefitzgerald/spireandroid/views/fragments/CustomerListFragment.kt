@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,16 +21,17 @@ private const val TAG = "CustomerListFragment"
 class CustomerListFragment : Fragment() {
 
     private lateinit var customersRecyclerView: RecyclerView
-    private var adapter: CustomerAdapter? = null
+//    private var adapter: CustomerAdapter? = null
+    private var adapter: CustomerAdapter? = CustomerAdapter(emptyList())
 
     private val customerListViewModel: CustomerListViewModel by lazy {
         ViewModelProviders.of(this).get(CustomerListViewModel::class.java)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "Total Customers: ${customerListViewModel.customers.size}")
-    }
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        Log.d(TAG, "Total Customers: ${customerListViewModel.customers.size}")
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,13 +43,28 @@ class CustomerListFragment : Fragment() {
         customersRecyclerView = view.findViewById(R.id.customers_recycler_view) as RecyclerView
         customersRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        updateUI()
+//        updateUI()
+
+        customersRecyclerView.adapter = adapter
 
         return view
     }
 
-    private fun updateUI() {
-        val customers = customerListViewModel.customers
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        customerListViewModel.customerListLiveData.observe(
+            viewLifecycleOwner,
+            Observer { customers ->
+                customers?.let {
+                    Log.i(TAG, "Got customers ${customers.size}")
+                    updateUI(customers)
+                }
+            }
+        )
+    }
+    private fun updateUI(customers: List<Customer>) {
+//        val customers = customerListViewModel.customers
         adapter = CustomerAdapter(customers)
         customersRecyclerView.adapter = adapter
     }
