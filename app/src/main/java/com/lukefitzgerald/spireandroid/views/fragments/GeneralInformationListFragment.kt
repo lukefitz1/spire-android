@@ -17,7 +17,7 @@ private const val TAG = "GeneralInfListFragment"
 class GeneralInformationListFragment : Fragment() {
 
     private lateinit var generalInfoRecyclerView: RecyclerView
-    private var adapter: GeneralInformationListFragment.GeneralInformationAdapter? = null
+    private var adapter: GeneralInformationAdapter? = null
 
     private val generalInformationListViewModel: GeneralInformationListViewModel by lazy {
         ViewModelProviders.of(this).get(GeneralInformationListViewModel::class.java)
