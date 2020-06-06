@@ -2,9 +2,7 @@ package com.lukefitzgerald.spireandroid.views.fragments
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -27,6 +25,7 @@ class ArtistListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         Log.d(TAG, "Total Artists: ${artistListViewModel.artists.size}")
     }
 
@@ -43,6 +42,11 @@ class ArtistListFragment : Fragment() {
         updateUI()
 
         return view
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_customer_list, menu)
     }
 
     private fun updateUI() {
