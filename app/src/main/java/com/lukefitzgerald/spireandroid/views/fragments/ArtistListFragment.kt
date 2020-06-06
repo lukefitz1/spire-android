@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -55,14 +56,23 @@ class ArtistListFragment : Fragment() {
         artistRecyclerView.adapter = adapter
     }
 
-    private inner class ArtistHolder(view: View) : RecyclerView.ViewHolder(view) {
+    // Toast.makeText(context, "${customer.firstName} pressed!", Toast.LENGTH_SHORT).show()
+    private inner class ArtistHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
         private lateinit var artist : Artist
 
         val artistNameTextView: TextView = itemView.findViewById(R.id.artist_name)
 
+        init {
+            itemView.setOnClickListener(this)
+        }
+
         fun bind(artist: Artist) {
             this.artist = artist
-            artistNameTextView.text = "${artist.firstName} ${artist.lastName}"
+            artistNameTextView.text = "${this.artist.firstName} ${this.artist.lastName}"
+        }
+
+        override fun onClick(v: View) {
+            Toast.makeText(context, "${this.artist.firstName} ${this.artist.lastName} pressed!", Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -55,14 +56,23 @@ class GeneralInformationListFragment : Fragment() {
         generalInfoRecyclerView.adapter = adapter
     }
 
-    private inner class GeneralInformationHolder(view: View) : RecyclerView.ViewHolder(view) {
+    // Toast.makeText(context, "${customer.firstName} pressed!", Toast.LENGTH_SHORT).show()
+    private inner class GeneralInformationHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
         private lateinit var generalInfo : GeneralInformation
 
         val generalInfoTextView: TextView = itemView.findViewById(R.id.general_information_label)
 
+        init {
+            itemView.setOnClickListener(this)
+        }
+
         fun bind(generalInfo: GeneralInformation) {
             this.generalInfo = generalInfo
             generalInfoTextView.text = this.generalInfo.informationLabel
+        }
+
+        override fun onClick(v: View) {
+            Toast.makeText(context, "${this.generalInfo.informationLabel} pressed!", Toast.LENGTH_SHORT).show()
         }
     }
 
