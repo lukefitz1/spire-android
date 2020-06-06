@@ -56,8 +56,14 @@ class GeneralInformationListFragment : Fragment() {
     }
 
     private inner class GeneralInformationHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private lateinit var generalInfo : GeneralInformation
 
         val generalInfoTextView: TextView = itemView.findViewById(R.id.general_information_label)
+
+        fun bind(generalInfo: GeneralInformation) {
+            this.generalInfo = generalInfo
+            generalInfoTextView.text = this.generalInfo.informationLabel
+        }
     }
 
     private inner class GeneralInformationAdapter(var generalInfo: List<GeneralInformation>) : RecyclerView.Adapter<GeneralInformationListFragment.GeneralInformationHolder>() {
@@ -73,9 +79,8 @@ class GeneralInformationListFragment : Fragment() {
 
         override fun onBindViewHolder(holder: GeneralInformationHolder, position: Int) {
             val gi = generalInfo[position]
-            holder.apply {
-                generalInfoTextView.text = gi.informationLabel
-            }
+
+            holder.bind(gi)
         }
     }
 }

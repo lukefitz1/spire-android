@@ -56,8 +56,14 @@ class ArtistListFragment : Fragment() {
     }
 
     private inner class ArtistHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private lateinit var artist : Artist
 
         val artistNameTextView: TextView = itemView.findViewById(R.id.artist_name)
+
+        fun bind(artist: Artist) {
+            this.artist = artist
+            artistNameTextView.text = "${artist.firstName} ${artist.lastName}"
+        }
     }
 
     private inner class ArtistAdapter(var artists: List<Artist>) : RecyclerView.Adapter<ArtistHolder>() {
@@ -71,9 +77,8 @@ class ArtistListFragment : Fragment() {
 
         override fun onBindViewHolder(holder: ArtistHolder, position: Int) {
             val artist = artists[position]
-            holder.apply {
-                artistNameTextView.text = "${artist.firstName} ${artist.lastName}"
-            }
+
+            holder.bind(artist)
         }
     }
 }
