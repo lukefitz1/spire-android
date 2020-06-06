@@ -6,7 +6,7 @@ import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.lukefitzgerald.spireandroid.views.fragments.ArtistListFragment
 import com.lukefitzgerald.spireandroid.views.fragments.CustomerListFragment
-import com.lukefitzgerald.spireandroid.views.fragments.GeneralInformationFragment
+import com.lukefitzgerald.spireandroid.views.fragments.GeneralInformationListFragment
 import java.util.*
 
 private const val TAG = "TAG"
@@ -52,7 +52,7 @@ class MainApplicationActivity : AppCompatActivity(), CustomerListFragment.Callba
                 true
             }
             R.id.navigation_general_information -> {
-                val fragment = GeneralInformationFragment()
+                val fragment = GeneralInformationListFragment()
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment)
                     .commit()
                 true

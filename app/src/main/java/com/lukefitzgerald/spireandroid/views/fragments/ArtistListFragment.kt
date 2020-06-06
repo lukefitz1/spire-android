@@ -51,10 +51,6 @@ class ArtistListFragment : Fragment() {
         artistRecyclerView.adapter = adapter
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     private inner class ArtistHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         val artistNameTextView: TextView = itemView.findViewById(R.id.artist_name)
