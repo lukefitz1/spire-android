@@ -6,4 +6,7 @@
     <string name="password_label">Password</string>
     <string name="logo_description">Spire Logo</string>
     <string name="new_customer">New Customer</string>
+    <string name="customers">Customers</string>
+    <string name="artists">Artists</string>
+    <string name="general_information">General Information</string>
 </resources>
