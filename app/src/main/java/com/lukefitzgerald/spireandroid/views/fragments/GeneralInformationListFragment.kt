@@ -1,27 +1,42 @@
 package com.lukefitzgerald.spireandroid.views.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lukefitzgerald.spireandroid.R
 import com.lukefitzgerald.spireandroid.models.GeneralInformation
 import com.lukefitzgerald.spireandroid.views.models.GeneralInformationListViewModel
+import java.util.*
 
 private const val TAG = "GeneralInfListFragment"
 
 class GeneralInformationListFragment : Fragment() {
 
+    //Required interface for hosting activities
+    interface Callbacks {
+        fun onGeneralInformationSelected(generalInformationId: UUID)
+    }
+
+    private var callbacks: Callbacks? = null
+
     private lateinit var generalInfoRecyclerView: RecyclerView
-    private var adapter: GeneralInformationAdapter? = null
+    private var adapter: GeneralInformationAdapter? = GeneralInformationAdapter(emptyList())
 
     private val generalInformationListViewModel: GeneralInformationListViewModel by lazy {
         ViewModelProviders.of(this).get(GeneralInformationListViewModel::class.java)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callbacks = context as GeneralInformationListFragment.Callbacks?
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,24 +54,56 @@ class GeneralInformationListFragment : Fragment() {
 
         generalInfoRecyclerView = view.findViewById(R.id.general_information_recycler_view) as RecyclerView
         generalInfoRecyclerView.layoutManager = LinearLayoutManager(context)
+        generalInfoRecyclerView.adapter = adapter
 
-        updateUI()
+//        updateUI()
 
         return view
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.fragment_customer_list, menu)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        generalInformationListViewModel.generalInformationListLiveData.observe(
+            viewLifecycleOwner,
+            Observer { generalInformations ->
+                generalInformations?.let {
+                    Log.i(TAG, "Got general infos ${generalInformations.size}")
+                    updateUI(generalInformations)
+                }
+            }
+        )
     }
 
-    private fun updateUI() {
-        val generalInfos = generalInformationListViewModel.generalInfo
-        adapter = GeneralInformationAdapter(generalInfos)
+    override fun onDetach() {
+        super.onDetach()
+        callbacks = null
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_general_information_list, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.new_general_information -> {
+                val gi = GeneralInformation()
+                gi.informationLabel = "Buenos Aires Cafe"
+                gi.information = "This is some information about this piece of General Information"
+                generalInformationListViewModel.addGeneralInformation(gi)
+                callbacks?.onGeneralInformationSelected(gi.id)
+                true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun updateUI(generalInformations: List<GeneralInformation>) {
+//        val generalInfos = generalInformationListViewModel.generalInfo
+        adapter = GeneralInformationAdapter(generalInformations)
         generalInfoRecyclerView.adapter = adapter
     }
 
-    // Toast.makeText(context, "${customer.firstName} pressed!", Toast.LENGTH_SHORT).show()
     private inner class GeneralInformationHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
         private lateinit var generalInfo : GeneralInformation
 
@@ -72,7 +119,8 @@ class GeneralInformationListFragment : Fragment() {
         }
 
         override fun onClick(v: View) {
-            Toast.makeText(context, "${this.generalInfo.informationLabel} pressed!", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "${this.generalInfo.informationLabel} pressed!", Toast.LENGTH_SHORT).show()
+            callbacks?.onGeneralInformationSelected(generalInfo.id)
         }
     }
 

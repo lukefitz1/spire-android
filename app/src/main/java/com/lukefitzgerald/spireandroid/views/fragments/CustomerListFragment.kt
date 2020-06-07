@@ -22,7 +22,7 @@ class CustomerListFragment : Fragment() {
 
     //Required interface for hosting activities
     interface Callbacks {
-        fun onCustomerSelected(crimeId: UUID)
+        fun onCustomerSelected(customerId: UUID)
     }
 
     private var callbacks: Callbacks? = null

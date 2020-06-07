@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.lukefitzgerald.spireandroid.models.Artist
 import com.lukefitzgerald.spireandroid.views.fragments.ArtistListFragment
 import com.lukefitzgerald.spireandroid.views.fragments.CustomerListFragment
 import com.lukefitzgerald.spireandroid.views.fragments.GeneralInformationListFragment
@@ -11,7 +12,7 @@ import java.util.*
 
 private const val TAG = "TAG"
 
-class MainApplicationActivity : AppCompatActivity(), CustomerListFragment.Callbacks {
+class MainApplicationActivity : AppCompatActivity(), CustomerListFragment.Callbacks, GeneralInformationListFragment.Callbacks, ArtistListFragment.Callbacks {
 
     private lateinit var bottomNavigation: BottomNavigationView
 
@@ -34,7 +35,33 @@ class MainApplicationActivity : AppCompatActivity(), CustomerListFragment.Callba
     }
 
     override fun onCustomerSelected(customerId: UUID) {
-        Log.d(TAG, "MainApplicationActivity.onCustomerSelected: $customerId")
+//        Log.d(TAG, "MainApplicationActivity.onCustomerSelected: $customerId")
+        val fragment = CustomerListFragment()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    override fun onArtistSelected(artistId: UUID) {
+//        Log.d(TAG, "MainApplicationActivity.onArtistSelected: $artistId")
+        val fragment = ArtistListFragment()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    override fun onGeneralInformationSelected(generalInformationId: UUID) {
+//        Log.d(TAG, "MainApplicationActivity.onGeneralInformationSelected: $generalInformationId")
+        val fragment = GeneralInformationListFragment()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
