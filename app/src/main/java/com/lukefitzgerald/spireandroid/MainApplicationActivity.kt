@@ -2,15 +2,12 @@ package com.lukefitzgerald.spireandroid
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.lukefitzgerald.spireandroid.models.Artist
 import com.lukefitzgerald.spireandroid.views.fragments.ArtistListFragment
 import com.lukefitzgerald.spireandroid.views.fragments.CustomerListFragment
 import com.lukefitzgerald.spireandroid.views.fragments.GeneralInformationListFragment
 import java.util.*
-
-private const val TAG = "TAG"
 
 class MainApplicationActivity : AppCompatActivity(), CustomerListFragment.Callbacks, GeneralInformationListFragment.Callbacks, ArtistListFragment.Callbacks {
 

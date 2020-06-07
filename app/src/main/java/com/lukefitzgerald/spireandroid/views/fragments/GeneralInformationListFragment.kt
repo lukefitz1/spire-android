@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -16,7 +15,7 @@ import com.lukefitzgerald.spireandroid.models.GeneralInformation
 import com.lukefitzgerald.spireandroid.views.models.GeneralInformationListViewModel
 import java.util.*
 
-private const val TAG = "GeneralInfListFragment"
+private const val TAG = "GeneralInfoListFragment"
 
 class GeneralInformationListFragment : Fragment() {
 
@@ -36,13 +35,12 @@ class GeneralInformationListFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        callbacks = context as GeneralInformationListFragment.Callbacks?
+        callbacks = context as Callbacks?
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        Log.d(TAG, "Total GIs: ${generalInformationListViewModel.generalInfo.size}")
     }
 
     override fun onCreateView(
@@ -55,8 +53,6 @@ class GeneralInformationListFragment : Fragment() {
         generalInfoRecyclerView = view.findViewById(R.id.general_information_recycler_view) as RecyclerView
         generalInfoRecyclerView.layoutManager = LinearLayoutManager(context)
         generalInfoRecyclerView.adapter = adapter
-
-//        updateUI()
 
         return view
     }
@@ -87,11 +83,13 @@ class GeneralInformationListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.new_general_information -> {
-                val gi = GeneralInformation()
-                gi.informationLabel = "Buenos Aires Cafe"
-                gi.information = "This is some information about this piece of General Information"
-                generalInformationListViewModel.addGeneralInformation(gi)
-                callbacks?.onGeneralInformationSelected(gi.id)
+
+                val fragment = GeneralInformationCreateFragment.newInstance()
+                this.activity!!.supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit()
                 true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -99,7 +97,6 @@ class GeneralInformationListFragment : Fragment() {
     }
 
     private fun updateUI(generalInformations: List<GeneralInformation>) {
-//        val generalInfos = generalInformationListViewModel.generalInfo
         adapter = GeneralInformationAdapter(generalInformations)
         generalInfoRecyclerView.adapter = adapter
     }
@@ -107,7 +104,7 @@ class GeneralInformationListFragment : Fragment() {
     private inner class GeneralInformationHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
         private lateinit var generalInfo : GeneralInformation
 
-        val generalInfoTextView: TextView = itemView.findViewById(R.id.general_information_label)
+        val generalInfoTextView: TextView = itemView.findViewById(R.id.general_information_label_text_input)
 
         init {
             itemView.setOnClickListener(this)
