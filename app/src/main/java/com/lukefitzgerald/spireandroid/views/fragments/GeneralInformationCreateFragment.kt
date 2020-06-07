@@ -50,6 +50,8 @@ class GeneralInformationCreateFragment : Fragment() {
             gi.information = "${generalInfo.text}"
             generalInformationListViewModel.addGeneralInformation(gi)
 //            callbacks?.onGeneralInformationSelected(gi.id)
+
+            this.activity!!.supportFragmentManager.popBackStack()
         }
 
         return view

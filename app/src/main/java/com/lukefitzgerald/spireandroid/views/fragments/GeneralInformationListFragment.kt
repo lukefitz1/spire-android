@@ -117,7 +117,15 @@ class GeneralInformationListFragment : Fragment() {
 
         override fun onClick(v: View) {
 //            Toast.makeText(context, "${this.generalInfo.informationLabel} pressed!", Toast.LENGTH_SHORT).show()
-            callbacks?.onGeneralInformationSelected(generalInfo.id)
+
+            val fragment = GeneralInformationEditFragment.newInstance(this.generalInfo.id)
+            activity!!.supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
+
+//            callbacks?.onGeneralInformationSelected(generalInfo.id)
         }
     }
 
